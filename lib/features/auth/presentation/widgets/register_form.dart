@@ -64,6 +64,7 @@ class RegisterFormState extends State<RegisterForm> {
                   }
                   return null;
                 },
+                keyboardType: TextInputType.emailAddress,
                 controller: _emailController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),

@@ -47,6 +47,7 @@ class LoginFormState extends State<LoginForm> {
                 }
                 return null;
               },
+              keyboardType: TextInputType.emailAddress,
               controller: _emailController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
