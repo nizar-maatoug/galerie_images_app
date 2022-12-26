@@ -22,30 +22,21 @@ Future<void> init() async {
 
 // Bloc
 
-  print("sl1");
+  sl.registerLazySingleton(() => AuthBloc(
+        signInUserUseCase: sl(),
+        signOutUserUseCase: sl(),
+      ));
 
-  //sl.registerFactory(() => AuthBloc(
-  //    signInUserUseCase: sl(),
-  //  signOutUserUseCase: sl(),
-  //));
-  sl.registerLazySingleton(
-      () => AuthBloc(signInUserUseCase: sl(), signOutUserUseCase: sl()));
-  sl.registerFactory(() => UserManagerBloc(registerUserUseCase: sl()));
-
-  print("sl2");
+  sl.registerLazySingleton(() => UserManagerBloc(registerUserUseCase: sl()));
 
 // Usecases
 
-  print("sl3");
   sl.registerLazySingleton(() => RegisterUserUseCase(sl()));
   sl.registerLazySingleton(() => SignInUserUseCase(sl()));
   sl.registerLazySingleton(() => SignOutUserUseCase(sl()));
 
-  print("sl4");
-
 // Repository
 
-  print("sl5");
   sl.registerLazySingleton<UserRepository>(
       () => UserRepositoryImpl(userDataSource: sl(), networkInfo: sl()));
 
@@ -60,8 +51,6 @@ Future<void> init() async {
 
 //! External
 
-  
-
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => InternetConnectionChecker());
@@ -71,5 +60,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => firebaseService);
 
   //Router
-  sl.registerLazySingleton(() => AppRouter());
+  sl.registerLazySingleton(() => AppRouter(sl()));
 }

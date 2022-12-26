@@ -15,28 +15,23 @@ class UserDataSourceImpl implements UserDataSource {
   UserDataSourceImpl({required this.firebaseService});
   @override
   Future<UserCredential> registerUser(UserModel userModel) {
-    return FirebaseAuth.instance.createUserWithEmailAndPassword(
+    return firebaseService.getAuth().createUserWithEmailAndPassword(
         email: userModel.email!, password: userModel.password!);
   }
 
   @override
   Future<UserCredential> signInUser(UserModel userModel) {
-    print('login131');
-    print(userModel.email);
-    print(userModel.password);
-    //return firebaseService.getAuth().signInWithEmailAndPassword(
-    //email: userModel.email!, password: userModel.password!);
     return firebaseService.getAuth().signInWithEmailAndPassword(
-        email: "nizar10@gmail.com", password: "nizarnizar");
+        email: userModel.email!, password: userModel.password!);
   }
 
   @override
   Future<void> signOutUser() {
-    return FirebaseAuth.instance.signOut();
+    return firebaseService.getAuth().signOut();
   }
 
   @override
   Future<void>? updateUserName(String userName) {
-    return FirebaseAuth.instance.currentUser?.updateDisplayName(userName);
+    return firebaseService.getAuth().currentUser?.updateDisplayName(userName);
   }
 }

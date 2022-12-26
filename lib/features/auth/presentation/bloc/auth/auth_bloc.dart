@@ -19,9 +19,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEvent>((event, emit) async {
       if (event is LoginEvent) {
         emit(LoginProgressState());
-        print("debut login");
+       
         final failureOrDoneLogin = await signInUserUseCase(event.user);
-        print('fin login');
+        
 
         failureOrDoneLogin.fold(
             (left) => emit(

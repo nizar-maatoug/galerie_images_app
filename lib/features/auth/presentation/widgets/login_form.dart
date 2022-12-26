@@ -15,9 +15,8 @@ class LoginForm extends StatefulWidget {
   }
 }
 
-class LoginFormState extends State<LoginForm>
-    with AutomaticKeepAliveClientMixin {
-  //final _formKey = GlobalKey<FormState>();
+class LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pwdController = TextEditingController();
@@ -32,7 +31,7 @@ class LoginFormState extends State<LoginForm>
   @override
   Widget build(BuildContext context) {
     return Form(
-      //key: _formKey,
+      key: _formKey,
       child: Column(
         children: [
           Padding(
@@ -89,16 +88,13 @@ class LoginFormState extends State<LoginForm>
   }
 
   void validateAndLoginUser() {
-    //if (_formKey.currentState!.validate()) {
-    //final user = UserEntity(
-    // name: "", email: _emailController.text, password: _pwdController.text);
+    if (_formKey.currentState!.validate()) {
+      final user = UserEntity(
+          name: "",
+          email: _emailController.text.trim(),
+          password: _pwdController.text.trim());
 
-    //BlocProvider.of<AuthBloc>(context).add(LoginEvent(user: user));
-    FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: "nizar10@gmail.com", password: "nizarnizar");
-    //}
+      BlocProvider.of<AuthBloc>(context).add(LoginEvent(user: user));
+    }
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

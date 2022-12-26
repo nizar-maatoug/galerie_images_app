@@ -48,7 +48,7 @@ dev_dependencies:
   dartz: ^0.10.1
   equatable: ^2.0.5
   get_it:
-  internet_connection_checker: #^1.0.0+1
+  internet_connection_checker: ^1.0.0+1
   shared_preferences: ^2.0.15
   # gestion de la navigation  API 2.0(Declarative) 1.0(impérative)
   #Navigator.push(...)xxxx déconseillé 1.0

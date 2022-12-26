@@ -13,9 +13,6 @@ import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //  options: DefaultFirebaseOptions.currentPlatform,
-  //);
 
   await di.init();
 
@@ -33,22 +30,14 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.sl<AuthBloc>(),
         ),
-        BlocProvider(
-            create: (_) => di.sl<UserManagerBloc>()
-              ..add(RegisterEvent(
-                  user: UserEntity(
-                      name: "nizar",
-                      email: "nizar2@gmail.com",
-                      password: "nizarnizar")))),
+        BlocProvider(create: (_) => di.sl<UserManagerBloc>()),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           return MaterialApp.router(
             title: 'Galerie Images',
             theme: appTheme,
-            routerConfig: di
-                .sl<AppRouter>()
-                .router, /*AppRouter(BlocProvider.of<AuthBloc>(context)).router*/
+            routerConfig: di.sl<AppRouter>().router,
           );
         },
       ),

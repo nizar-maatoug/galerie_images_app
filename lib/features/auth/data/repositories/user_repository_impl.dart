@@ -46,53 +46,38 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Either<Failure, Unit>> signIn(UserEntity user) async {
-    print('login1');
     UserModel userModel = UserModel(
         uid: user.uid,
         name: user.name,
         email: user.email,
         profileURL: user.profilURL,
         password: user.password);
-    print('login12');
-    //if (await networkInfo.isConnected) {
-    //if (FirebaseAuth.instance.currentUser == null) {
-    print("user null");
-    try {
-      print('login13');
-      final credential = await userDataSource.signInUser(userModel);
-      print('login14');
-      print("user logged in: ");
-      print(credential.user);
-      return Right(unit);
-    } on FirebaseAuthException catch (e) {
-      print('login1: exception1');
-      if (e.code == 'user-not-found') {
-        print('login1: exception2');
-        return Left(SignInUserNotFoundFailure());
-      } else if (e.code == 'wrong-password') {
-        print('login1: exception3');
-        return Left(SignInWrongPwdFailure());
-      } else {
-        print('login1: exception4');
+
+    if (await networkInfo.isConnected) {
+      try {
+        final credential = await userDataSource.signInUser(userModel);
+        return Right(unit);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          return Left(SignInUserNotFoundFailure());
+        } else if (e.code == 'wrong-password') {
+          return Left(SignInWrongPwdFailure());
+        } else {
+          return Left(SignInFailure());
+        }
+      } catch (e) {
         return Left(SignInFailure());
       }
-    } catch (e) {
-      print('login1 exception22');
-      return Left(SignInFailure());
+    } else {
+      return Left(OfflineFailure());
     }
-    //} else {
-    //return Left(SignInFailure());
-    //}
-    //} else {
-    // print('login1 offline');
-    //return Left(OfflineFailure());
-    //}
   }
 
   @override
   Future<Either<Failure, Unit>> signOut() async {
     if (await networkInfo.isConnected) {
       await FirebaseAuth.instance.signOut();
+      print("signoout");
       return Right(unit);
     } else {
       return Left(OfflineFailure());
