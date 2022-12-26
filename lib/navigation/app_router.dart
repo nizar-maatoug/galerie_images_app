@@ -61,12 +61,16 @@ class AppRouter {
       final bool authenticated = authBloc.state is AuthenticatedState;
 
       final bool isGaleriePage = (state.subloc == '/galerie');
-
-      print("routernizar " + authBloc.state.toString());
-      print("routernizar " + unauthenticated.toString());
+      final bool isAuthOrLoginOrRegister = ((state.subloc == '/') ||
+          (state.subloc == '/register') ||
+          (state.subloc == '/login'));
 
       if (unauthenticated) {
         return isGaleriePage ? '/' : null;
+      }
+
+      if (authenticated) {
+        return isAuthOrLoginOrRegister ? '/galerie' : null;
       }
     },
     refreshListenable: GoRouterRefreshStream(authBloc.stream),

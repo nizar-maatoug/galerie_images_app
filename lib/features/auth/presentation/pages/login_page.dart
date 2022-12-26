@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:validators/validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:galerie_images_app/core/utils/snack_bar_message.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -16,6 +18,9 @@ class LoginPage extends StatelessWidget {
       listener: (context, state) {
         if (state is AuthenticatedState) {
           GoRouter.of(context).goNamed('galerie');
+        } else if (state is AuthErrorState) {
+          SnackBarMessage()
+              .showErrorSnackBar(message: state.message, context: context);
         }
       },
       child: Scaffold(

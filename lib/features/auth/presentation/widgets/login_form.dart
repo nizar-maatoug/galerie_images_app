@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:galerie_images_app/features/auth/domain/entities/user_entity.dart';
 import 'package:galerie_images_app/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:galerie_images_app/features/auth/presentation/widgets/auth_btn.dart';
 import 'package:go_router/go_router.dart';
 import 'package:validators/validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,9 +64,6 @@ class LoginFormState extends State<LoginForm> {
                 if (value == null || value.isEmpty) {
                   return 'le mot de passe est obligatoire'; //!! dans Strings
                 }
-                if (!isLength(value, 8)) {
-                  return "mot de passe faible"; //dans Strings
-                }
                 return null;
               },
               controller: _pwdController,
@@ -76,10 +74,24 @@ class LoginFormState extends State<LoginForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+            /* child: ElevatedButton(
               onPressed: validateAndLoginUser,
               child: const Text('Login'),
+            ), */
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state is LoginProgressState) {
+                  return const CircularProgressIndicator(
+                    color: Colors.blue,
+                  );
+                } else {
+                  return AuthButton(
+                      text: "Login",
+                      onPressed: validateAndLoginUser,
+                      color: Colors.blue);
+                }
+              },
             ),
           ),
         ],

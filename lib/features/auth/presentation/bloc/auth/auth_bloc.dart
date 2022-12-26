@@ -19,23 +19,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEvent>((event, emit) async {
       if (event is LoginEvent) {
         emit(LoginProgressState());
-       
-        final failureOrDoneLogin = await signInUserUseCase(event.user);
-        
 
-        failureOrDoneLogin.fold(
-            (left) => emit(
-                UnAuthenticatedState(message: _mapLoginFailureToMessage(left))),
-            (_) => emit(AuthenticatedState(message: "authenticated")));
+        final failureOrDoneLogin = await signInUserUseCase(event.user);
+
+        failureOrDoneLogin.fold((left) {
+          emit(AuthErrorState(message: _mapLoginFailureToMessage(left)));
+          emit(UnAuthenticatedState());
+        }, (_) => emit(AuthenticatedState(message: "authenticated")));
       } else if (event is LogoutEvent) {
         emit(LogOutInProgressState());
 
         final failureOrDoneLogOut = await signOutUserUseCase();
 
-        failureOrDoneLogOut.fold(
-            (left) => emit(
-                AuthenticatedState(message: _mapLogOutFailureToMessage(left))),
-            (_) => emit(UnAuthenticatedState(message: "unauthenticated")));
+        failureOrDoneLogOut.fold((left) {
+          emit(AuthErrorState(message: _mapLogOutFailureToMessage(left)));
+          emit(AuthenticatedState(message: "authenticated"));
+        }, (_) => emit(UnAuthenticatedState()));
       }
     });
   }

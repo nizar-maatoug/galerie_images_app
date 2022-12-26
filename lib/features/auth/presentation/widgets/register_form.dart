@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:galerie_images_app/features/auth/domain/entities/user_entity.dart';
 import 'package:galerie_images_app/features/auth/presentation/bloc/user_manager/user_manager_bloc.dart';
+import 'package:galerie_images_app/features/auth/presentation/widgets/auth_btn.dart';
 import 'package:validators/validators.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -93,10 +94,24 @@ class RegisterFormState extends State<RegisterForm> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+              /* child: ElevatedButton(
                 onPressed: validateAndRegisterUser,
                 child: const Text('Submit'),
+              ), */
+              child: BlocBuilder<UserManagerBloc, UserManagerState>(
+                builder: (context, state) {
+                  if (state is RegisteringUserState) {
+                    return const CircularProgressIndicator(
+                      color: Colors.green,
+                    );
+                  } else {
+                    return AuthButton(
+                        text: "Register",
+                        onPressed: validateAndRegisterUser,
+                        color: Colors.green);
+                  }
+                },
               ),
             ),
           ],
